@@ -1,0 +1,389 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+    <title>Barangay AI</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Site favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{%static 'src/images/BRGY_TAGAPO LOGO.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{%static 'src/images/BRGY_TAGAPO LOGO.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{%static 'src/images/BRGY_TAGAPO LOGO.png' %}">
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{%static 'vendors/styles/core.css' %}">
+    <link rel="stylesheet" type="text/css" href="{%static 'vendors/styles/icon-font.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{%static 'vendors/styles/style.css' %}">
+
+</head>
+<style>
+    .pre-loader {
+        background-image: url("{% static 'src/images/hall.jpg' %}");
+        /* Replace with your image URL */
+        background-size: cover;
+        /* Ensures the image covers the entire pre-loader background */
+        background-position: center;
+        /* Centers the image */
+        background-repeat: no-repeat;
+        /* Prevents the image from repeating */
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card-box:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .widget-style1 .progress-data {
+        flex: 1;
+    }
+
+    .widget-data {
+        text-align: right;
+    }
+
+    .user-info-dropdown .dropdown-menu {
+        min-width: 150px;
+    }
+
+    .right-sidebar-body-content h4 {
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+
+    .right-sidebar-body-content .form-group {
+        margin-bottom: 15px;
+    }
+
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-control {
+        border-radius: 5px;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        /* Prevent horizontal scrolling */
+    }
+
+    .main-container {
+        max-width: 100%;
+        /* Ensure the container doesn't exceed the viewport width */
+        box-sizing: border-box;
+    }
+
+    .card-box,
+    .card,
+    .table-responsive {
+        width: 100%;
+        /* Ensure no overflow within individual elements */
+    }
+</style>
+
+<body>
+    <div class="pre-loader">
+        <div class="pre-loader-box">
+            <div class="loader-logo">
+                <img src="{%static 'src/images/BRGY_TAGAPO LOGO.png' %}" alt="AI Logo">
+            </div>
+            <div class="loader-progress" id="progress_div">
+                <div class="bar" id="bar1"></div>
+            </div>
+            <div class="percent" id="percent1">150%</div>
+            <div class="loading-text">Loading...</div>
+        </div>
+    </div>
+
+    {% include 'superadmin/header.html' %}
+
+
+    {% include 'superadmin/right_sidebar.html' %}
+
+
+    {% include 'superadmin/left_sidebar.html' %}
+
+    <div class="main-container" style="padding: 20px; margin-top: 70px;">
+        <div class="pd-ltr-20">
+            <div class="card-box pd-20 height-50-p mb-30"
+                style="position: relative; padding: 30px; max-width: 80%; margin: 0 auto; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px;">
+                <div class="row align-items-center">
+                    <div class="col-md-4">
+                        <img src="{% static 'vendors/images/banner-img.png' %}" alt="Banner"
+                            style="max-width: 100%; height: auto;">
+                    </div>
+                    <div class="col-md-6">
+                        <h4 class="font-20 weight-500 mb-10 text-capitalize">
+                            Welcome back <div class="weight-600 font-30 text-blue" id="welcome-name"></div>
+                        </h4>
+                    </div>
+                    <div class="col-md-2" style="position: absolute; top: 10px; right: 150px;">
+                        <div id="date-display" class="weight-500 font-10 text-black" style="white-space: nowrap;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Account Overview Section -->
+    <div class="row mb-4 text-center justify-content-center">
+        <div class="col-sm-4">
+            <div class="card border-info shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-info">Total Admin Accounts</h5>
+                    <p class="card-text h2" id="total-admins">{{ total_admins }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card border-success shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-success">Online Admin Accounts</h5>
+                    <p class="card-text h2" id="online-admins">{{ online_admins }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card border-secondary shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-secondary">Offline Admin Accounts</h5>
+                    <p class="card-text h2" id="offline-admins">{{ offline_admins }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter and Activity Log Table in the same container -->
+    <div class="container-fluid mb-4"> <!-- Changed from container to container-fluid -->
+        <div class="card">
+            <div class="card-body">
+                <!-- Filter Section -->
+                <form id="filterForm" class="row g-3 mb-4">
+                    <div class="form-group col-md-3">
+                        <label for="dateFilter" class="form-label">Filter by Date</label>
+                        <input type="date" id="dateFilter" class="form-control">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="actionFilter" class="form-label">Filter by Action</label>
+                        <select id="actionFilter" class="form-control">
+                            <option value="" selected>All Actions</option>
+                            <option value="Login">Login</option>
+                            <option value="Update">Update</option>
+                            <option value="Delete">Delete</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3 d-flex align-items-end">
+                        <button type="button" id="clearFilterBtn" class="btn btn-secondary w-100">Clear Filter</button>
+                    </div>
+                </form>
+
+                <!-- Search Bar Section -->
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <input type="text" id="searchBar" class="form-control" placeholder="Search..."
+                            style="max-width: 30%; font-size: 16px;">
+                    </div>
+                </div>
+
+                <!-- Activity Log Table Section -->
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Admin Name</th>
+                                <th>Action</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logTableBody">
+                            <!-- Rows will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-wrap pd-20 mb-20 card-box">All rights reserved.</div>
+
+
+    <!-- js -->
+    <script src="{%static 'vendors/scripts/core.js' %}"></script>
+    <script src="{%static 'vendors/scripts/script.min.js' %}"></script>
+    <script src="{%static 'vendors/scripts/process.js' %}"></script>
+    <script src="{%static 'vendors/scripts/layout-settings.js' %}"></script>
+    <script src="{%static 'src/plugins/apexcharts/apexcharts.min.js' %}"></script>
+    <script src="{%static 'src/plugins/datatables/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{%static 'src/plugins/datatables/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{%static 'src/plugins/datatables/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{%static 'src/plugins/datatables/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{%static 'vendors/scripts/dashboard.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {{ last_activity|json_script:"context-data" }}
+
+
+    <script>
+        const chatSocket = new WebSocket('ws://localhost:8000/ws/');
+        let activityLogs = JSON.parse(document.getElementById('context-data').textContent);
+
+        renderLogs(activityLogs);
+
+
+        chatSocket.onopen = function (e) {
+            console.log("WebSocket connection established.");
+        };
+
+        chatSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            const logTableBody = document.getElementById('logTableBody');
+
+            // Create a new row for the received log data
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${data.timestamp}</td>
+                <td>${data.username}</td>
+                <td>${data.type}</td>
+                <td>${data.message}</td>
+            `;
+            // Optional: Remove the last row if a specific limit needs to be maintained
+            if (logTableBody.children.length == 5) { // Adjust the limit as required
+                logTableBody.removeChild(logTableBody.lastElementChild);
+            }
+            // Add the new row at the top of the table
+            logTableBody.prepend(newRow);
+
+            
+            setTimeout(function () {
+                newRow.style.backgroundColor = 'rgba(152, 186, 239, 1)';
+            }, 0);
+            setTimeout(function () {
+                newRow.style.backgroundColor = 'rgba(152, 186, 239, 0)';
+            }, 2000);
+
+            console.log("Received message:", data);
+        };
+
+        chatSocket.onerror = function (e) {
+            console.error("WebSocket error:", e);
+        };
+
+        chatSocket.onclose = function (e) {
+            console.log("WebSocket connection closed:", e);
+        };
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Display the current date (optional)
+            const dateDisplay = document.getElementById('date-display');
+            const now = new Date();
+            dateDisplay.textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        });
+
+        function updateDate() {
+            const dateElement = document.getElementById('date-display');
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const today = new Date().toLocaleDateString(undefined, options);
+            dateElement.textContent = today;
+        }
+
+        updateDate();
+        setInterval(updateDate, 1000 * 60 * 60 * 24);
+        function handleLogout() {
+            window.location.href = "login.html";
+        }
+
+
+        function renderLogs(logs) {
+            const logTableBody = document.getElementById('logTableBody');
+            logTableBody.innerHTML = '';
+
+            if (logs.length === 0) {
+                logTableBody.innerHTML = `<tr><td colspan="5" class="text-center">No logs found</td></tr>`;
+                return;
+            }
+
+
+            logs.forEach(log => {
+                const row = `<tr>
+                <td>${log.timestamp}</td>
+                <td>${log.username}</td>
+                <td>${log.type}</td>
+                <td>${log.message}</td>
+            </tr>`;
+                logTableBody.innerHTML += row;
+            });
+        }
+
+
+
+        function filterLogs() {
+            const adminFilter = document.getElementById('adminFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+            const actionFilter = document.getElementById('actionFilter').value;
+
+            const filteredLogs = activityLogs.filter(log => {
+                const matchesAdmin = adminFilter === '' || log.admin === adminFilter;
+                const matchesDate = dateFilter === '' || log.date.startsWith(dateFilter);
+                const matchesAction = actionFilter === '' || log.action === actionFilter;
+                return matchesAdmin && matchesDate && matchesAction;
+            });
+
+            renderLogs(filteredLogs);
+
+            const clearFilterBtn = document.getElementById('clearFilterBtn');
+            if (adminFilter || dateFilter || actionFilter) {
+                clearFilterBtn.textContent = 'Clear Filter';
+                clearFilterBtn.classList.remove('btn-secondary');
+                clearFilterBtn.classList.add('btn-danger');
+            } else {
+                clearFilterBtn.textContent = 'Filter Logs';
+                clearFilterBtn.classList.remove('btn-danger');
+                clearFilterBtn.classList.add('btn-secondary');
+            }
+        }
+
+        document.getElementById('adminFilter').addEventListener('change', filterLogs);
+        document.getElementById('dateFilter').addEventListener('input', filterLogs);
+        document.getElementById('actionFilter').addEventListener('change', filterLogs);
+
+        document.getElementById('clearFilterBtn').addEventListener('click', function () {
+            document.getElementById('adminFilter').value = '';
+            document.getElementById('dateFilter').value = '';
+            document.getElementById('actionFilter').value = '';
+            renderLogs(activityLogs);
+
+            this.textContent = 'Filter Logs';
+            this.classList.remove('btn-danger');
+            this.classList.add('btn-secondary');
+        });
+
+    </script>
+</body>
+
+</html>
